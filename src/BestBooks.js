@@ -1,29 +1,57 @@
 import React from 'react';
+import axios from 'axios';
+import Carousel from "react-bootstrap/Carousel";
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: []
+      books: [],
+      errorMessage: "",
     }
   }
+  
+  componentDidMount = async () => {
+    try {
+      const config = {
+        method: "get",
+        baseURL: process.env.REACT_APP_HEROKU,
+        url: "/books",
+      };
 
-  /* TODO: Make a GET request to your API to fetch all the books from the database  */
+      const response = await axios(config);
+      console.log(response.data);
+      this.setState({ books: response.data });
+    } catch (error) {
+      console.error(error);
+      this.setState({
+        errorMessage: `Status Code ${error.response.status}: ${error.response.data}`,
+      });
+    }
+  };
 
   render() {
-
-    /* TODO: render all the books in a Carousel */
+  
 
     return (
-      <>
-        <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-
+      <Carousel>
         {this.state.books.length ? (
-          <p>Book Carousel coming soon</p>
+          this.state.books.map((book) => (
+            <Carousel.Item key={book._id}>
+              <img src="https://m.media-amazon.com/images/I/51DF6ZR8G7L._AC_SY780_.jpg" alt={book.title}/>
+              <Carousel.Caption>
+                <>
+                  <p>Title: {book.title}</p>
+                  <p>Description: {book.description}</p>
+                  <p>Status: {book.hasRead ? 'Have read' : 'Have not read'}</p>
+                </>
+              </Carousel.Caption>
+            </Carousel.Item>
+          ))
         ) : (
-          <h3>No Books Found :(</h3>
+          <h3>No books found! </h3>
         )}
-      </>
+      </Carousel>
     )
   }
 }
