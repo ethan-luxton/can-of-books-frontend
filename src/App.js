@@ -6,6 +6,8 @@ import About from './About';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 
+
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,6 +15,30 @@ import {
 } from "react-router-dom";
 
 class App extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     books: [],
+  //     showNewBookForm: false,
+  //     errMessage: ''
+  //   }
+  // }
+  
+  // componentDidMount = async () => {
+  //   const config = {
+  //     method: 'get', // get is the default
+  //     baseURL: 'http://localhost:3001',
+  //     url: '/books' // endpoint
+  //   }
+
+  //   const res = await axios(config);
+  //   console.log('DATA: ', res.data);
+  //   this.setState({ cats: res.data });
+  // }
+
+  
+
+  showForm = () => this.setState({ showNewBookForm: true });
   render() {
     return (
       <>
@@ -21,7 +47,7 @@ class App extends React.Component {
           <Routes>
             <Route 
               exact path="/"
-              element={<BestBooks />}
+              element={<BestBooks/>}
             >
             </Route>
             <Route
@@ -29,9 +55,13 @@ class App extends React.Component {
               element={<About />}
             >
             </Route>
+          
+          
           </Routes>
           <Footer />
         </Router>
+        
+        
       </>
     )
   }
