@@ -101,6 +101,7 @@ class BestBooks extends React.Component {
   showForm = () => this.setState({ showNewBookForm: true });
   handleSelectBook = (bookToBeSelected) => this.setState({ selectedBook: bookToBeSelected, show: true });
   handleOnHide = () => this.setState({ selectedBook: {}, show: false });
+  handleClose = () => this.setState({ show: false })
 
   render() {
       console.log(this.state)
@@ -128,7 +129,7 @@ class BestBooks extends React.Component {
         )}
       </Carousel>
       <CreateBookForm handleCreateBook={this.handleCreateBook}/>
-      <UpdateBookForm show={this.state.show} handleUpdateBook={this.handleUpdateBook} selectedBook={this.state.selectedBook}/>
+      <UpdateBookForm show={this.state.show} handleUpdateBook={this.handleUpdateBook} selectedBook={this.state.selectedBook} handleClose={this.handleClose}/>
       </>
     )
   }
