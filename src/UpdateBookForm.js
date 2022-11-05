@@ -8,19 +8,25 @@ class UpdateBookForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        _id: this.props.selectedBook._id,
+      // _id: this.props.selectedBook?._id,
       title: this.props.selectedBook.title,
       description: this.props.selectedBook.description,
       hasRead: this.props.selectedBook.hasRead,
-      show: false,
+      // show: false,
     }
   }
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log('this.state: ', this.state);
-    this.props.handleUpdateBook(this.state);
-    
+    const updatedBook = {
+      _id: this.props.selectedBook?._id,
+      title: this.state.title || this.props.selectedBook.title,
+      description: this.state.description || this.props.selectedBook.description,
+      hasRead: this.state.hasRead || this.props.selectedBook.hasRead
+    }
+    console.log('updatedBook: ', updatedBook);
+    this.props.handleUpdateBook(updatedBook);
+    this.props.handleClose();
   }
 
   handleTitleChange = event => this.setState({ title: event.target.value });
@@ -31,8 +37,8 @@ class UpdateBookForm extends React.Component {
  
 
   render() {
-    console.log(this.state)
-    console.log(this.props)
+    console.log("State: ", this.state)
+    console.log("Props: ", this.props)
     return (
     <>
         
@@ -51,7 +57,7 @@ class UpdateBookForm extends React.Component {
                   type="text"
                   placeholder={this.state.title}
                   onChange={this.handleTitleChange}
-                  defaultValue={this.state.title}
+                  defaultValue={this.props.selectedBook.title}
                 />
               </Form.Group>
 
@@ -60,7 +66,7 @@ class UpdateBookForm extends React.Component {
                 <Form.Control
                   type="text"
                   placeholder={this.state.description}
-                  value={this.state.description}
+                  defaultValue={this.props.selectedBook.description}
                   onChange={this.handleDescriptionChange}
                 />
               </Form.Group>
@@ -70,7 +76,7 @@ class UpdateBookForm extends React.Component {
                   type="checkbox"
                   label="Have you read this book?"
                   onChange={this.handleReadChange}
-                  checked={this.state.hasRead}
+                  checked={this.props.selectedBook.hasRead}
                 />
               </Form.Group>
 
