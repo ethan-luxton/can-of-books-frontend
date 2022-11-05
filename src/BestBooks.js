@@ -47,16 +47,24 @@ class BestBooks extends React.Component {
   };
   handleCreateBook = async (bookToBeCreated) => {
     try {
-      const config = {
-        method: 'post',
-        baseURL: process.env.REACT_APP_HEROKU,
-        url: '/books',
-        data: bookToBeCreated
-      }
+      if (this.props.auth0.isAuthenticated) {
+        const response = await this.props.auth0.getIdTokenClaims();
+        const jwt = response.__raw;
+  
+        console.log('token: ', jwt);
+  
+        const config = {
+          headers: { "Authorization": `Bearer ${jwt}` }, // new lab 15
+          method: 'post',
+          baseURL: process.env.REACT_APP_HEROKU,
+          url: '/books',
+          data: bookToBeCreated
+        }
+      
 
       const res = await axios(config);
       this.setState({ books: [...this.state.books, res.data] });
-    } catch(err) {
+    }} catch(err) {
       console.error('Error is in the App.js in the createBook Function: ', err);
       this.setState({ errMessage: `Status Code ${err.res.status}: ${err.res.data}`});
     }
@@ -65,9 +73,14 @@ class BestBooks extends React.Component {
   handleDeleteBook = async (bookToBeDeleted) => {
     try {
       const proceed = window.confirm(`Do you wish to delete ${bookToBeDeleted.title}?`);
-
-      if (proceed) {
+      if (this.props.auth0.isAuthenticated && proceed) {
+        const response = await this.props.auth0.getIdTokenClaims();
+        const jwt = response.__raw;
+  
+        console.log('token: ', jwt);
+  
         const config = {
+          headers: { "Authorization": `Bearer ${jwt}` }, // new lab 15
           method: 'delete',
           baseURL: process.env.REACT_APP_HEROKU,
           url: `/books/${bookToBeDeleted._id}`
@@ -87,12 +100,19 @@ class BestBooks extends React.Component {
   handleUpdateBook = async (bookToBeUpdated) => {
     console.log(bookToBeUpdated)
     try {
+      if (this.props.auth0.isAuthenticated) {
+        const response = await this.props.auth0.getIdTokenClaims();
+        const jwt = response.__raw;
+  
+        console.log('token: ', jwt);
+  
         const config = {
+          headers: { "Authorization": `Bearer ${jwt}` }, // new lab 15
           method: 'put',
           baseURL: process.env.REACT_APP_HEROKU,
           url: `/books/${bookToBeUpdated._id}`
         }
-
+  
         const res = await axios(config);
         console.log(res.data);
         const updatedBooks = this.state.books.map(preExistingBook => {
@@ -103,7 +123,7 @@ class BestBooks extends React.Component {
           }
         })
         this.setState({ books: updatedBooks });
-    } catch(err) {
+    }} catch(err) {
       console.error('Error is in the BestBooks.js in the handleUpdateBook Function: ', err);
       this.setState({ errorMessage: `Status Code ${err.res.status}: ${err.res.data}`});
     }

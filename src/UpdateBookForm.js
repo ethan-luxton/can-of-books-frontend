@@ -9,9 +9,10 @@ class UpdateBookForm extends React.Component {
     super(props);
     this.state = {
       // _id: this.props.selectedBook?._id,
-      title: this.props.selectedBook?.title,
-      description: this.props.selectedBook?.description,
-      hasRead: this.props.selectedBook?.hasRead,
+
+      title: this.props.selectedBook.title,
+      description: this.props.selectedBook.description,
+      hasRead: this.props.selectedBook.hasRead,
       // show: false,
     }
   }
@@ -40,52 +41,52 @@ class UpdateBookForm extends React.Component {
     return (
 
       <>
-
+        
         <Modal show={this.props.show} onHide={this.props.handleClose} >
-          <Modal.Header closeButton>
-            <Modal.Title>Update the book!</Modal.Title>
-          </Modal.Header>
+        <Modal.Header closeButton>
+          <Modal.Title>Update the book!</Modal.Title>
+        </Modal.Header>
 
-          <Modal.Body>
-            <Container>
+        <Modal.Body>
+          <Container>
 
-              <Form onSubmit={this.handleSubmit}>
-                <Form.Group>
-                  <Form.Label>Title</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder={this.state.title}
-                    onChange={this.handleTitleChange}
-                    defaultValue={this.props.selectedBook.title}
-                  />
-                </Form.Group>
+            <Form onSubmit={this.handleSubmit}>
+              <Form.Group>
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder={this.state.title}
+                  onChange={this.handleTitleChange}
+                  defaultValue={this.props.selectedBook.title}
+                />
+              </Form.Group>
 
-                <Form.Group>
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder={this.state.description}
-                    defaultValue={this.props.selectedBook.description}
-                    onChange={this.handleDescriptionChange}
-                  />
-                </Form.Group>
+              <Form.Group>
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder={this.state.description}
+                  defaultValue={this.props.selectedBook.description}
+                  onChange={this.handleDescriptionChange}
+                />
+              </Form.Group>
 
-                <Form.Group>
-                  <Form.Check
-                    type="checkbox"
-                    label="Have you read this book?"
-                    onChange={this.handleReadChange}
-                    checked={this.props.selectedBook.hasRead}
-                  />
-                </Form.Group>
+              <Form.Group>
+                <Form.Check
+                  type="checkbox"
+                  label="Have you read this book?"
+                  onChange={this.handleReadChange}
+                  checked={this.props.selectedBook.hasRead}
+                />
+              </Form.Group>
 
-                <Button type='submit'>Submit</Button>
+              <Button type='submit'>Submit</Button>
 
-              </Form>
-            </Container>
-          </Modal.Body>
-        </Modal>
-      </>
+            </Form>
+          </Container>
+        </Modal.Body>
+      </Modal>
+    </>
 
     )
   }
