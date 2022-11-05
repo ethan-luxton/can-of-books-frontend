@@ -4,6 +4,7 @@ import Carousel from "react-bootstrap/Carousel";
 import Button from 'react-bootstrap/Button';
 import CreateBookForm from './CreateBookForm';
 import UpdateBookForm from './UpdateBookForm';
+import { withAuth0 } from '@auth0/auth0-react';
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -19,16 +20,25 @@ class BestBooks extends React.Component {
   
   componentDidMount = async () => {
     try {
-      const config = {
-        method: "get",
-        baseURL: process.env.REACT_APP_HEROKU,
-        url: "/books",
-      };
-
-      const response = await axios(config);
-      console.log(response.data);
-      this.setState({ books: response.data });
-    } catch (error) {
+      if (this.props.auth0.isAuthenticated) {
+        const res = await this.props.auth0.getIdTokenClaims();
+        const jwt = res.__raw;
+  
+        console.log('token: ', jwt);
+  
+        const config = {
+          headers: { "Authorization": `Bearer ${jwt}` }, // new lab 15
+          method: 'get',
+          baseURL: process.env.REACT_APP_HEROKU,
+          url: '/books'
+        }
+  
+        const booksResponse = await axios(config);
+  
+        console.log("Books from DB: ", booksResponse.data);
+        
+        this.setState({ books: booksResponse.data });
+    }} catch (error) {
       console.error(error);
       this.setState({
         errorMessage: `Status Code ${error.response.status}: ${error.response.data}`,
@@ -101,7 +111,8 @@ class BestBooks extends React.Component {
   showForm = () => this.setState({ showNewBookForm: true });
   handleSelectBook = (bookToBeSelected) => this.setState({ selectedBook: bookToBeSelected, show: true });
   handleOnHide = () => this.setState({ selectedBook: {}, show: false });
-  handleClose = () => this.setState({ show: false })
+  handleClose = () => this.setState({show: false})
+
 
   render() {
       console.log(this.state)
@@ -114,9 +125,9 @@ class BestBooks extends React.Component {
               <img src="https://m.media-amazon.com/images/I/51DF6ZR8G7L._AC_SY780_.jpg" alt={book.title}/>
               <Carousel.Caption>
                 <>
-                  <p>Title: {book.title}</p>
-                  <p>Description: {book.description}</p>
-                  <p>Status: {book.hasRead ? 'Have read' : 'Have not read'}</p>
+                  <p className='book'>Title: {book.title}</p>
+                  <p className='book'>Description: {book.description}</p>
+                  <p className='book'>Status: {book.hasRead ? 'Have read' : 'Have not read'}</p>
                   <Button onClick={() => this.handleDeleteBook(book)}>Delete this book!</Button>
                   <Button variant="primary" onClick={() => this.handleSelectBook(book)}>Update this book!</Button>
                   
@@ -129,10 +140,12 @@ class BestBooks extends React.Component {
         )}
       </Carousel>
       <CreateBookForm handleCreateBook={this.handleCreateBook}/>
-      <UpdateBookForm show={this.state.show} handleUpdateBook={this.handleUpdateBook} selectedBook={this.state.selectedBook} handleClose={this.handleClose}/>
+
+      <UpdateBookForm handleClose={this.handleClose} show={this.state.show} handleUpdateBook={this.handleUpdateBook} selectedBook={this.state.selectedBook}/>
+
       </>
     )
   }
 }
 
-export default BestBooks;
+export default withAuth0(BestBooks);

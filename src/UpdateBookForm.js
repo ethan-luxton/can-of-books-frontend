@@ -33,10 +33,12 @@ class UpdateBookForm extends React.Component {
   handleDescriptionChange = event => this.setState({ description: event.target.value });
   handleReadChange = event => this.setState({ hasRead: event.target.checked });
 
+
   render() {
     console.log("State: ", this.state)
     console.log("Props: ", this.props)
     return (
+
       <>
 
         <Modal show={this.props.show} onHide={this.props.handleClose} >
