@@ -8,10 +8,10 @@ class UpdateBookForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        _id: this.props.selectedBook?._id,
-      title: this.props.selectedBook?.name,
-      description: this.props.selectedBook?.description,
-      hasRead: this.props.selectedBook?.hasRead,
+        _id: this.props.selectedBook._id,
+      title: this.props.selectedBook.title,
+      description: this.props.selectedBook.description,
+      hasRead: this.props.selectedBook.hasRead,
       show: false,
     }
   }
@@ -27,7 +27,7 @@ class UpdateBookForm extends React.Component {
   handleDescriptionChange = event => this.setState({ description: event.target.value });
   handleReadChange = event => this.setState({ hasRead: event.target.checked });
   
-    handleClose = () => this.setState({show: false})
+    
  
 
   render() {
@@ -36,7 +36,7 @@ class UpdateBookForm extends React.Component {
     return (
     <>
         
-        <Modal show={this.props.show} onHide={this.handleClose} >
+        <Modal show={this.props.show} onHide={this.props.handleClose} >
         <Modal.Header closeButton>
           <Modal.Title>Update the book!</Modal.Title>
         </Modal.Header>

@@ -1,5 +1,10 @@
-p {
+.book {
     color: black;
     text-align: left;
     margin-left: 3rem;
 }
+
+.profile {
+    color: white;
+}
+

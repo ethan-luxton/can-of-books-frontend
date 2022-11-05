@@ -5,6 +5,11 @@ import BestBooks from './BestBooks';
 import About from './About';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
+import { withAuth0 } from "@auth0/auth0-react";
+import Login from './Login';
+import Logout from './Logout';
+
+
 
 
 
@@ -15,33 +20,12 @@ import {
 } from "react-router-dom";
 
 class App extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     books: [],
-  //     showNewBookForm: false,
-  //     errMessage: ''
-  //   }
-  // }
   
-  // componentDidMount = async () => {
-  //   const config = {
-  //     method: 'get', // get is the default
-  //     baseURL: 'http://localhost:3001',
-  //     url: '/books' // endpoint
-  //   }
-
-  //   const res = await axios(config);
-  //   console.log('DATA: ', res.data);
-  //   this.setState({ cats: res.data });
-  // }
-
-  
-
   showForm = () => this.setState({ showNewBookForm: true });
   render() {
     return (
       <>
+      {this.props.auth0.isAuthenticated ? <>
         <Router>
           <Header />
           <Routes>
@@ -55,16 +39,23 @@ class App extends React.Component {
               element={<About />}
             >
             </Route>
-          
-          
+            
+    
+            <Route
+              exact path="/Logout"
+              element={<Logout />}
+            >
+            </Route>
           </Routes>
           <Footer />
         </Router>
-        
-        
+      </>
+      :
+      <Login />
+      }
       </>
     )
   }
 }
 
-export default App;
+export default withAuth0(App);

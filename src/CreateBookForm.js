@@ -21,7 +21,6 @@ class CreateBookForm extends React.Component {
                 description: event.target.formDesc.value,
                 hasRead: event.target.formRead.checked
             };
-            console.log(`Here is our NEW book: `, bookCreate);
             this.props.handleCreateBook(bookCreate);
         }
         render() {
